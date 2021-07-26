@@ -184,7 +184,7 @@ class TestGroupView:
         group = post_with_group.group
         html = response.content.decode()
 
-        templates_list = ['group.html', 'posts/group.html']
+        templates_list = ['group_list.html', 'posts/group_list.html']
         html_template = select_template(templates_list).template.source
 
         assert search_refind(r'{%\s*for\s+.+in.*%}', html_template), (
@@ -194,13 +194,6 @@ class TestGroupView:
             'Отредактируйте HTML-шаблон, не найден тег закрытия цикла'
         )
 
-        assert re.search(
-            r'<\s*title\s*>\s*Записи\s+сообщества\s+' + group.title + r'\s+\|\s+Yatube\s*<\s*\/title\s*>',
-            html
-        ), (
-            'Отредактируйте HTML-шаблон, не найдено название страницы '
-            '`<title>Записи сообщества {{ название_группы }} | Yatube</title>`'
-        )
         assert re.search(
             r'<\s*h1\s*>\s*' + group.title + r'\s*<\s*\/h1\s*>',
             html
@@ -212,8 +205,3 @@ class TestGroupView:
             r'<\s*p\s*>\s*' + group.description + r'\s*<\s*\/p\s*>',
             html
         ), 'Отредактируйте HTML-шаблон, не найдено описание группы `<p>{{ описание_группы }}</p>`'
-
-        assert re.search(
-            r'<\s*p(\s+class=".+"|\s*)>\s*' + post_with_group.text + r'\s*<\s*\/p\s*>',
-            html
-        ), 'Отредактируйте HTML-шаблон, не найден текст поста `<p>{{ текст_поста }}</p>`'
